@@ -9,4 +9,4 @@ var e,t=arguments[3];!function(n){if("object"==typeof exports&&"undefined"!=type
 },{"matter-js":"mG0D","./car":"oY1M"}],"Focm":[function(require,module,exports) {
 "use strict";var e=n(require("./components/world.js"));function n(e){return e&&e.__esModule?e:{default:e}}window.addEventListener("load",function n(){window.removeEventListener("load",n),(0,e.default)()});
 },{"./components/world.js":"y5iI"}]},{},["Focm"], null)
-//# sourceMappingURL=/src.f73154d1.js.map
+//# sourceMappingURL=src.f73154d1.js.map
