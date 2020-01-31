@@ -16,7 +16,16 @@ export default () => {
   });
 
   const scale = 1;
-  World.add(engine.world, createCar(350, 100));
+  
+  const car = createCar(350, 100);
+  document.addEventListener('keydown', function(e) {
+    const carBody = car.bodies[1];
+    if (e.keyCode == 39) { // Right arrow key
+      carBody.torque = 0.5;
+    }
+  });
+  
+  World.add(engine.world, car);
 
   const boxA = Bodies.rectangle(400, 200, 80, 80);
   const boxB = Bodies.rectangle(450, 300, 80, 80);
