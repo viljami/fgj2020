@@ -13,7 +13,11 @@ export default () => {
   const engine = Engine.create();
   const render = Render.create({
       element: document.body,
-      engine
+      engine,
+      options: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
   });
 
   const scale = 1;
