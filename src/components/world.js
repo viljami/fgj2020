@@ -1,4 +1,5 @@
 import {
+  Body,
   Bodies,
   Composites,
   Composite,
@@ -16,12 +17,15 @@ export default () => {
   });
 
   const scale = 1;
-  
+
+  const maxSpeed = 0.2
   const car = createCar(350, 100);
   document.addEventListener('keydown', function(e) {
     const carBody = car.bodies[1];
     if (e.keyCode == 39) { // Right arrow key
-      carBody.torque = 0.5;
+      let velocity = carBody.angularSpeed + 0.01;
+      velocity = Math.min(velocity, maxSpeed);
+      Body.setAngularVelocity(carBody, velocity);
     }
   });
   
