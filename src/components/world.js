@@ -27,17 +27,11 @@ export default () => {
   
   World.add(engine.world, car);
 
-  const boxA = Bodies.rectangle(400, 200, 80, 80);
-  const boxB = Bodies.rectangle(450, 300, 80, 80);
   const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-  World.add(engine.world, [boxA, boxB, ground]);
+  World.add(engine.world, [ground]);
   Engine.run(engine);
   Render.run(render);
-
-  setTimeout(() => {
-    Composite.remove(engine.world, boxA);
-  }, 2000);
 
   return {
     engine,
