@@ -12,12 +12,13 @@ import {
 } from 'matter-js';
 import createWorld from './world.js';
 import createLevel from './level.js';
-import createCar from './car';
 
 export default (engine, render, levels) => {
   const padding = Vector.create(400, 400);
+  const { context } = render;
 
-  let car;
+  let currentCar;
+  let currentGoal;
 
   let currentLevel = 0;
 
@@ -29,24 +30,26 @@ export default (engine, render, levels) => {
     Engine.clear(engine);
 
     const { water } = createWorld(engine);
-    car = createCar(350, 100);
 
-    const { goal } = createLevel(engine, levels[currentLevel]);
+    const { car, flag, goal } = createLevel(engine, levels[currentLevel]);
 
-    World.add(engine.world, [car]);
-
-    collisionGoal = car.bodies.map(body => [body, goal]);
-    collisionWater = car.bodies.map(body => [body, water]);
+    currentGoal = goal;
+    currentCar = car;
+    collisionGoal = currentCar.bodies.map(body => [body, goal]);
+    collisionGoal = collisionGoal.concat(
+      currentCar.bodies.map(body => [body, flag])
+    );
+    collisionWater = currentCar.bodies.map(body => [body, water]);
   };
   reset();
 
   Events.on(engine, 'beforeUpdate', () => {
-    const carBody = car.bodies[1];
+    const carBody = currentCar.bodies[1];
     Body.setAngularVelocity(carBody, 0.1);
   });
 
   Events.on(engine, 'afterUpdate', () => {
-    Render.lookAt(render, car.bodies, padding);
+    Render.lookAt(render, currentCar.bodies, padding);
 
     let collisions = Detector.collisions(collisionGoal, engine)
 
