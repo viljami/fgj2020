@@ -30,7 +30,7 @@ class ObjectPool {
 
   create(type, x, y) {
     this.index++;
-    if (this.index >= this.all.size) {
+    if (this.index >= this.all.size - 1) {
       this.index = 0;
     }
 
@@ -99,7 +99,7 @@ class Interact extends EventEmiter {
 
     this.emit('end', this.coordinates);
   }
-  
+
   onOut(event) {
     this.emit('out');
   }
