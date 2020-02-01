@@ -68,4 +68,25 @@ export default (engine, render, levels) => {
       reset();
     }
   });
+
+  Events.on(render, 'afterRender', () => {
+    const angle = Vector.angle(
+      currentCar.bodies[0].position,
+      currentGoal.position
+    );
+
+    const dx = Math.cos(angle) * 150;
+    const dy = Math.sin(angle) * 150;
+    const w = window.innerWidth / 2;
+    const h = window.innerHeight / 2;
+
+    context.fillStyle = '#f00';
+
+    context.moveTo(w + dx, h + dy);
+    context.beginPath();
+    context.arc(w + dx, h + dy, 10, 0, Math.PI * 2);
+    context.closePath();
+    context.fill();
+
+  });
 };
