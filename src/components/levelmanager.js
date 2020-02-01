@@ -159,4 +159,8 @@ export default (engine, render, levels) => {
 
     currentTexts.forEach(fillText);
   });
+
+  return {
+    reset
+  };
 };

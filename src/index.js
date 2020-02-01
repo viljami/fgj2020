@@ -13,9 +13,13 @@ import interact from './lib/interact';
 window.addEventListener('load', function load() {
   window.removeEventListener('load', load);
 
+  const navigation = document.getElementById('nav');
+  const main = document.getElementById('main');
+  const resetButton = document.getElementById('reset');
+
   const engine = Engine.create();
   const render = Render.create({
-      element: document.body,
+      element: main,
       engine,
       options: {
         width: window.innerWidth,
@@ -28,7 +32,8 @@ window.addEventListener('load', function load() {
   Engine.run(engine);
   Render.run(render);
 
-  const levels = [{
+  const levels = [
+  {
     objects: [
       { type: "start", x: 50, y: 50 },
       { type: "ground", x: 160, y: 400, width: 400, height: 20 },
@@ -62,7 +67,9 @@ window.addEventListener('load', function load() {
       { type: "goal", x: 650, y: 350 }
     ]
   }];
-  initLevelManager(engine, render, levels);
+
+  const { reset } = initLevelManager(engine, render, levels);
+  resetButton.addEventListener('click', reset);
 
   interact.start()
   interact.on('end', ({ start, end }) => {
