@@ -53,6 +53,14 @@ window.addEventListener('load', function load() {
   },
   {
     objects: [
+      { type: "start", x: 50, y: 0 },
+      { type: "ground", x: 160, y: 100, width: 300, height: 20 },
+      { type: "ground", x: 160, y: 600, width: 100, height: 20 },
+      { type: "goal", x: 160, y: 550 },
+    ]
+  },
+  {
+    objects: [
       { type: "start", x: 350, y: 100 },
       { type: "ground", x: 450, y: 300, width: 550, height: 20, angle: Math.PI/4 },
       { type: "ground", x: 700, y: 510, width: 150, height: 20, angle: Math.PI/8 },
