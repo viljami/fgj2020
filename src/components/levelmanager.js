@@ -150,7 +150,7 @@ export default (engine, render, levels) => {
     const w = window.innerWidth / 2;
     const h = window.innerHeight / 2;
 
-    context.fillStyle = '#f63';
+    context.fillStyle = '#fff';
 
     context.save();
     context.translate(w + dx, h + dy);
@@ -163,7 +163,7 @@ export default (engine, render, levels) => {
     context.closePath();
     context.fill();
     context.rotate(Math.PI / 4);
-    context.fillRect(-5, 11, 10, 10)
+    context.fillRect(-5, 11, 9, 9)
     context.restore();
 
     currentTexts.forEach(fillText);
