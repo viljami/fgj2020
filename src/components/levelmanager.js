@@ -68,7 +68,7 @@ export default (engine, render, levels) => {
   Events.on(engine, 'beforeUpdate', () => {
     const carBody = currentCar.bodies[1];
     const carBody2 = currentCar.bodies[2];
-    let velocity;   
+    let velocity;
     if (carBody.angularSpeed < 0.2) {
         velocity =  gear1Acceleration;
     } else {
@@ -162,6 +162,12 @@ export default (engine, render, levels) => {
   });
 
   return {
+    getCurrentLevel: () => currentLevel,
+
+    setCurrentLevel: (levelIndex) => {
+      currentLevel = levelIndex;
+    },
+
     reset
   };
 };

@@ -16,7 +16,26 @@ window.addEventListener('load', function load() {
 
   const navigation = document.getElementById('nav');
   const main = document.getElementById('main');
+  const startView = document.getElementById('start-view');
+  const levelsView = document.getElementById('levels-view');
+
   const resetButton = document.getElementById('reset');
+  const levelsButton = document.getElementById('levels');
+
+  const hideView = view => () => view.className = 'hide';
+  const showView = view => {
+    view.className = view.className
+      .split('hide')
+      .join('');
+  };
+
+  const showOnce = () => {
+    levelsButton.removeEventListener('click', showOnce);
+    showView(levelsView);
+  };
+
+  document.body.addEventListener('click', hideView(startView));
+  levelsButton.addEventListener('click', showOnce);
 
   const engine = Engine.create();
   const render = Render.create({
@@ -33,12 +52,13 @@ window.addEventListener('load', function load() {
   Engine.run(engine);
   Render.run(render);
 
+  const {
+    getCurrentLevel,
+    setCurrentLevel,
+    reset
+  } = initLevelManager(engine, render, levels);
 
-
-  const { reset } = initLevelManager(engine, render, levels);
   resetButton.addEventListener('click', reset);
-
-  interact.start()
 
   let originalTimeScale = 0.0;
   interact.on('start', ({ start, end }) => {
@@ -75,10 +95,36 @@ window.addEventListener('load', function load() {
 
     engine.timing.timeScale = originalTimeScale;
   });
-  
+
   interact.on('out', () => {
      if (originalTimeScale > 0) {
        engine.timing.timeScale = originalTimeScale;
      }
   });
+
+  levelsView.innerHTML = `
+    <h2>Levels</h2>
+    <div>
+      ${levels.map((_, i) => `<a class="level">${i + 1}</a>`).join('')}
+    </div>
+  `;
+
+  levelsView.addEventListener('click', ({ target }) => {
+    const level = +target.innerText;
+    if (isNaN(level)) {
+      hideView(levelsView)();
+      return;
+    }
+
+    setCurrentLevel(level - 1);
+    hideView(levelsView)();
+
+    setTimeout(() => {
+      levelsButton.addEventListener('click', showOnce);
+    }, 100);
+
+    reset();
+  });
+
+  interact.start()
 });
