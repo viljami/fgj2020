@@ -30,7 +30,7 @@ class ObjectPool {
 
   create(type, x, y) {
     this.index++;
-    if (this.index >= this.all.size - 1) {
+    if (this.index >= this.all.length - 1) {
       this.index = 0;
     }
 
