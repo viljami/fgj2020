@@ -22,30 +22,12 @@ window.addEventListener('load', function load() {
   const resetButton = document.getElementById('reset');
   const levelsButton = document.getElementById('levels');
 
-  const hideView = view => () => view.className = 'hide';
+  const hideView = view => view.className = 'hide';
   const showView = view => {
     view.className = view.className
       .split('hide')
       .join('');
   };
-
-  const showOnce = () => {
-    levelsButton.removeEventListener('click', showOnce);
-
-    const unlockedLevels = getUnlockedLevels();
-
-    levelsView.innerHTML = `
-      <h2>Levels</h2>
-      <div>
-        ${levels.map((_, i) => `<a class="level${~unlockedLevels.indexOf(i) ? '' : ' locked'}">${i + 1}</a>`).join('')}
-      </div>
-    `;
-
-    showView(levelsView);
-  };
-
-  document.body.addEventListener('click', hideView(startView));
-  levelsButton.addEventListener('click', showOnce);
 
   const engine = Engine.create();
   const render = Render.create({
@@ -70,6 +52,29 @@ window.addEventListener('load', function load() {
   } = initLevelManager(engine, render, levels);
 
   resetButton.addEventListener('click', reset);
+
+  const handleStartViewOnce = () => {
+    document.body.removeEventListener('click', handleStartViewOnce);
+    hideView(startView);
+    showView(navigation);
+  };
+  document.body.addEventListener('click', handleStartViewOnce);
+
+  const showOnceLevels = () => {
+    levelsButton.removeEventListener('click', showOnceLevels);
+    const unlockedLevels = getUnlockedLevels();
+
+    showView(levelsView);
+
+    levelsView.innerHTML = `
+      <h2>Levels</h2>
+      <div>
+        ${levels.map((_, i) => `<a class="level${~unlockedLevels.indexOf(i) ? '' : ' locked'}">${i + 1}</a>`).join('')}
+      </div>
+    `;
+  };
+
+  levelsButton.addEventListener('click', showOnceLevels);
 
   let originalTimeScale = 0.0;
   interact.on('start', ({ start, end }) => {
@@ -121,15 +126,15 @@ window.addEventListener('load', function load() {
     }
 
     if (isNaN(level)) {
-      hideView(levelsView)();
+      hideView(levelsView);
       return;
     }
 
     setCurrentLevel(level - 1);
-    hideView(levelsView)();
+    hideView(levelsView);
 
     setTimeout(() => {
-      levelsButton.addEventListener('click', showOnce);
+      levelsButton.addEventListener('click', showOnceLevels);
     }, 100);
 
     reset();
