@@ -24,14 +24,17 @@ export default (engine, render, levels) => {
 
   let collisionGoal = [];
   let collisionWater = [];
+  let collisionGround = [];
 
+  let goal;
+  let objects = [];
   const reset = () => {
     World.clear(engine.world);
     Engine.clear(engine);
 
     const { water } = createWorld(engine);
 
-    const { car, flag, goal } = createLevel(engine, levels[currentLevel]);
+    const { car, flag, goal, objects } = createLevel(engine, levels[currentLevel]);
 
     currentGoal = goal;
     currentCar = car;
@@ -40,14 +43,33 @@ export default (engine, render, levels) => {
       currentCar.bodies.map(body => [body, flag])
     );
     collisionWater = currentCar.bodies.map(body => [body, water]);
+    collisionGround = [];
+
+    // Back wheel collision for slowing rotation when in air
+    for (var key in objects) {
+      collisionGround = collisionGround.concat([[car.bodies[1], objects[key]]]);
+    }
   };
   reset();
 
+  const maxSpeed = 0.5;
+  const gear1Acceleration = 0.004;
+  const gear2Acceleration = 0.01;
   Events.on(engine, 'beforeUpdate', () => {
     const carBody = currentCar.bodies[1];
-    Body.setAngularVelocity(carBody, 0.1);
+    const carBody2 = currentCar.bodies[2];
+    let velocity;
+    if (carBody.angularSpeed < 0.2) {
+        velocity = carBody.angularSpeed + gear1Acceleration;
+    } else {
+        velocity = carBody.angularSpeed + gear2Acceleration;
+    }
+    velocity = Math.min(velocity, maxSpeed);
+    Body.setAngularVelocity(carBody, velocity);
+    Body.setAngularVelocity(carBody2, velocity);
   });
 
+  let collisionOccurrences = 0;
   Events.on(engine, 'afterUpdate', () => {
     Render.lookAt(render, currentCar.bodies, padding);
 
@@ -60,6 +82,30 @@ export default (engine, render, levels) => {
          currentLevel = 0;
       }
       reset();
+    }
+
+    // Test for backwheel collision with ground, slow down if not touching ground
+    collisions = Detector.collisions(collisionGround, engine)
+    if (!collisions.length) {
+      collisionOccurrences++;
+
+      if (collisionOccurrences > 1) {
+        const carBody = car.bodies[1];
+        const carBody2 = car.bodies[2];
+        let velocity;
+        if (carBody.angularSpeed > 0 && carBody.angularSpeed < 0.2) {
+          velocity = carBody.angularSpeed - gear1Acceleration;
+        } else if (carBody.angularSpeed > 0.2) {
+          velocity = carBody.angularSpeed - gear2Acceleration;
+        }
+        if (!isNaN(velocity)) {
+            velocity = Math.min(Math.max(velocity, 0), maxSpeed);
+            Body.setAngularVelocity(carBody, velocity);
+            Body.setAngularVelocity(carBody2, velocity);
+        }
+      }
+    } else {
+      collisionOccurrences = 0;
     }
 
     collisions = Detector.collisions(collisionWater, engine)
