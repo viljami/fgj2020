@@ -14,15 +14,22 @@ export default [
       { type: "ground", x: 160, y: 100, width: 300, height: 20 },
       { type: "ground", x: 650, y: 400, width: 150, height: 20 },
       { type: "goal", x: 650, y: 350 },
-      { type: 'text', x: 300, y: 250, text: '- And here ^ -'}
+      { type: 'text', x: 300, y: 250, text: '- Draw here ^ -'}
     ]
   },
-  { // elevator needed
+  { // hill
     objects: [
-      { type: "start", x: 50, y: 0 },
-      { type: "ground", x: 160, y: 100, width: 300, height: 20 },
-      { type: "ground", x: 160, y: 600, width: 100, height: 20 },
-      { type: "goal", x: 160, y: 550 },
+      { type: "start", x: 50, y: 50 },
+      { type: "ground", x: 160, y: 400, width: 400, height: 20 },
+      { type: "ground", x: 550, y: 480, width: 400, height: 20, angle: Math.PI / 8 },
+      { type: "ground", x: 930, y: 750, width: 500, height: 20, angle: Math.PI / 4 },
+      { type: "ground", x: 1320, y: 1300, width: 800, height: 20, angle: Math.PI / 3 },
+      { type: "ground", x: 1700, y: 1840, width: 500, height: 20, angle: Math.PI / 4 },
+      { type: "ground", x: 2260, y: 2180, width: 800, height: 20, angle: Math.PI / 8 },
+      { type: "ground", x: 2840, y: 2340, width: 400, height: 20 },
+      { type: "ground", x: 3090, y: 2325, width: 80, height: 20, angle: -Math.PI / 8 },
+      { type: "ground", x: 3150, y: 2295, width: 40, height: 20, angle: -Math.PI / 4 },
+      { type: "goal", x: 4000, y: 2000 },
     ]
   },
   { // loop
@@ -41,19 +48,12 @@ export default [
       { type: "goal", x: 650, y: 350 }
     ]
   },
-  { // hill
+  { // elevator needed
     objects: [
-      { type: "start", x: 50, y: 50 },
-      { type: "ground", x: 160, y: 400, width: 400, height: 20 },
-      { type: "ground", x: 550, y: 480, width: 400, height: 20, angle: Math.PI / 8 },
-      { type: "ground", x: 930, y: 750, width: 500, height: 20, angle: Math.PI / 4 },
-      { type: "ground", x: 1320, y: 1300, width: 800, height: 20, angle: Math.PI / 3 },
-      { type: "ground", x: 1700, y: 1840, width: 500, height: 20, angle: Math.PI / 4 },
-      { type: "ground", x: 2260, y: 2180, width: 800, height: 20, angle: Math.PI / 8 },
-      { type: "ground", x: 2840, y: 2340, width: 400, height: 20 },
-      { type: "ground", x: 3090, y: 2325, width: 80, height: 20, angle: -Math.PI / 8 },
-      { type: "ground", x: 3150, y: 2295, width: 40, height: 20, angle: -Math.PI / 4 },
-      { type: "goal", x: 4000, y: 2000 },
+      { type: "start", x: 50, y: 0 },
+      { type: "ground", x: 160, y: 100, width: 300, height: 20 },
+      { type: "ground", x: 160, y: 600, width: 100, height: 20 },
+      { type: "goal", x: 160, y: 550 },
     ]
   },
 ];
