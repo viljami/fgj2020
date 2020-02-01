@@ -63,20 +63,19 @@ export default (engine, render, levels) => {
   reset();
 
   const maxSpeed = 0.5;
-  const gear1Acceleration = 0.004;
-  const gear2Acceleration = 0.01;
+  const gear1Acceleration = 0.1;
+  const gear2Acceleration = 0.14;
   Events.on(engine, 'beforeUpdate', () => {
     const carBody = currentCar.bodies[1];
     const carBody2 = currentCar.bodies[2];
-    let velocity;
+    let velocity;   
     if (carBody.angularSpeed < 0.2) {
-        velocity = carBody.angularSpeed + gear1Acceleration;
+        velocity =  gear1Acceleration;
     } else {
-        velocity = carBody.angularSpeed + gear2Acceleration;
+        velocity =  gear2Acceleration;
     }
-    velocity = Math.min(velocity, maxSpeed);
-    Body.setAngularVelocity(carBody, velocity);
-    Body.setAngularVelocity(carBody2, velocity);
+    carBody.torque = velocity;
+    carBody2.torque = velocity;
   });
 
   let collisionOccurrences = 0;
@@ -99,7 +98,7 @@ export default (engine, render, levels) => {
     if (!collisions.length) {
       collisionOccurrences++;
 
-      if (collisionOccurrences > 1) {
+      if (collisionOccurrences > 2) {
         const carBody = currentCar.bodies[1];
         const carBody2 = currentCar.bodies[2];
         let velocity;
@@ -110,8 +109,10 @@ export default (engine, render, levels) => {
         }
         if (!isNaN(velocity)) {
             velocity = Math.min(Math.max(velocity, 0), maxSpeed);
-            Body.setAngularVelocity(carBody, velocity);
-            Body.setAngularVelocity(carBody2, velocity);
+            carBody.torque = 0;
+            carBody2.torque = 0;
+
+            collisionOccurrences = 0;
         }
       }
     } else {
