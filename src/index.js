@@ -14,6 +14,8 @@ import levels from './components/levels.js';
 window.addEventListener('load', function load() {
   window.removeEventListener('load', load);
 
+  const drawStartEnd = false;
+  const drawContinuous = true;
   const navigation = document.getElementById('nav');
   const main = document.getElementById('main');
   const startView = document.getElementById('start-view');
@@ -21,6 +23,9 @@ window.addEventListener('load', function load() {
 
   const resetButton = document.getElementById('reset');
   const levelsButton = document.getElementById('levels');
+  let mouseCoordinates = {};
+  let startCoordinates;
+  let prevBounds = {};
 
   const hideView = view => view.className = 'hide';
   const showView = view => {
@@ -41,7 +46,6 @@ window.addEventListener('load', function load() {
 
   render.mouse = Mouse.create(render.canvas);
 
-  Engine.run(engine);
   Render.run(render);
 
   const {
@@ -51,6 +55,28 @@ window.addEventListener('load', function load() {
     reset
   } = initLevelManager(engine, render, levels);
 
+  (function run() {
+    window.requestAnimationFrame(run);
+    Engine.update(engine, 1000 / 60);
+
+    if (placing && startCoordinates) {
+      const newCoordinates = render.mouse.position;
+    const { bounds, mouse } = render;
+    const boundDeltaX = bounds.min.x - prevBounds.x;
+    const boundDeltaY = bounds.min.y - prevBounds.y;
+      var diff = Math.sqrt(Math.pow(startCoordinates.x - mouseCoordinates.x + boundDeltaX, 2) + Math.pow(startCoordinates.y - mouseCoordinates.y + boundDeltaY, 2));
+      if (diff > 5 && drawContinuous) {
+        const { scale, offset } = mouse;
+        const scaleX = scale.x;
+        const scaleY = scale.y;
+        const sc = { x: startCoordinates.x + boundDeltaX, y: startCoordinates.y + boundDeltaY }
+        const nc = { x: mouseCoordinates.x, y: mouseCoordinates.y };
+        createGroundPath(sc, nc);
+        startCoordinates = { x: mouseCoordinates.x, y: mouseCoordinates.y };
+        prevBounds = { x: bounds.min.x, y: bounds.min.y };
+      }
+    }
+  })();
   resetButton.addEventListener('click', reset);
 
   const handleStartViewOnce = () => {
@@ -77,12 +103,35 @@ window.addEventListener('load', function load() {
   levelsButton.addEventListener('click', showOnceLevels);
 
   let originalTimeScale = 0.0;
+  let placing = false;
   interact.on('start', ({ start, end }) => {
+    startCoordinates = { x: mouseCoordinates.x, y: mouseCoordinates.y };
+    const { bounds } = render;
+    prevBounds = { x: bounds.min.x, y: bounds.min.y };
     originalTimeScale = engine.timing.timeScale;
     engine.timing.timeScale /= 2;
+    placing = true;
   });
-
+  
   interact.on('end', ({ start, end }) => {
+    if (drawStartEnd) {
+      createGroundPath(start, end);
+    }
+    engine.timing.timeScale = originalTimeScale;
+    startCoordinates = null;
+    placing = false;
+  });
+  
+  interact.on('move', ({ clientX, clientY }) => {
+    if (!startCoordinates && placing) {
+      startCoordinates = { x: clientX, y: clientY };
+      const { bounds } = render;
+      prevBounds = { x: bounds.min.x, y: bounds.min.y };
+    }
+    mouseCoordinates = { x: clientX, y: clientY };
+  });
+  
+  function createGroundPath(start, end) {
     const { bounds, mouse } = render;
     const { scale, offset } = mouse;
     const scaleX = scale.x;
@@ -108,14 +157,13 @@ window.addEventListener('load', function load() {
         dy < 0 ? -angle : angle
       )
     );
-
-    engine.timing.timeScale = originalTimeScale;
-  });
+  }
 
   interact.on('out', () => {
      if (originalTimeScale > 0) {
        engine.timing.timeScale = originalTimeScale;
      }
+     placing = false;
   });
 
   levelsView.addEventListener('click', ({ target }) => {

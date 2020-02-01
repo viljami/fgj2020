@@ -56,24 +56,28 @@ class Interact extends EventEmiter {
     this.events = {
       start: this.isTouch ? 'touchstart' : 'mousedown',
       end: this.isTouch ? 'touchend' : 'mouseup',
+      move: this.isTouch ? 'touchmove' : 'mousemove',
       out: 'mouseout'
     };
 
     this.onDown = this.onDown.bind(this);
     this.onUp = this.onUp.bind(this);
-	this.onOut = this.onOut.bind(this);
+    this.onMove = this.onMove.bind(this);
+    this.onOut = this.onOut.bind(this);
   }
 
   start() {
     document.body.addEventListener(this.events.start, this.onDown);
     document.body.addEventListener(this.events.end, this.onUp);
+	document.body.addEventListener(this.events.move, this.onMove);
     document.body.addEventListener(this.events.out, this.onOut);
   }
 
   stop() {
     document.body.removeEventListener(this.events.start, this.onDown);
     document.body.removeEventListener(this.events.end, this.onUp);
-	document.body.removeEventListener(this.events.out, this.onOut);
+    document.body.removeEventListener(this.events.move, this.onMove);
+    document.body.removeEventListener(this.events.out, this.onOut);
   }
 
   onDown(event) {
@@ -100,6 +104,12 @@ class Interact extends EventEmiter {
     this.emit('end', this.coordinates);
   }
 
+  onMove(event) {
+    if (!this.coordinates) return;
+    const { clientX, clientY } = event;
+    this.emit('move', { clientX, clientY });
+  }
+  
   onOut(event) {
     this.emit('out');
   }
