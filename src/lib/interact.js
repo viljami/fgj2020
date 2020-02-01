@@ -46,6 +46,7 @@ class Interact extends EventEmiter {
   constructor() {
     super();
 
+    this.isStartCalled = false;
     this.coordinates = {
       start: Vector.create(0, 0),
       end: Vector.create(0, 0)
@@ -69,7 +70,7 @@ class Interact extends EventEmiter {
   start() {
     document.body.addEventListener(this.events.start, this.onDown);
     document.body.addEventListener(this.events.end, this.onUp);
-	document.body.addEventListener(this.events.move, this.onMove);
+    document.body.addEventListener(this.events.move, this.onMove);
     document.body.addEventListener(this.events.out, this.onOut);
   }
 
@@ -81,6 +82,8 @@ class Interact extends EventEmiter {
   }
 
   onDown(event) {
+    this.isStartCalled = true;
+
     if (this.isTouch) {
       event = event.touches[0];
     }
@@ -105,11 +108,18 @@ class Interact extends EventEmiter {
   }
 
   onMove(event) {
-    if (!this.coordinates) return;
+    if (!this.isStartCalled) {
+      return;
+    }
+
+    if (this.isTouch) {
+      event = event.touches[0];
+    }
+
     const { clientX, clientY } = event;
     this.emit('move', { clientX, clientY });
   }
-  
+
   onOut(event) {
     this.emit('out');
   }
