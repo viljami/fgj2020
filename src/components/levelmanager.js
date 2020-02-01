@@ -12,16 +12,63 @@ import {
 } from 'matter-js';
 import createWorld from './world.js';
 import createLevel from './level.js';
+const toInt = n => +n;
+const getStoredLevels = () => {
+  const defaultResult = [0];
+
+  if (!window.localStorage) {
+    return defaultResult;
+  }
+
+  const item = window.localStorage
+    .getItem('unlocked');
+
+  return item ? item.split(',').map(toInt) : defaultResult;
+};
+
+const setStoredLevels = (levels) => {
+  if (!window.localStorage) {
+    return;
+  }
+
+  window.localStorage.setItem('unlocked', levels.join(','))
+};
+
+const getStoredCurrentLevel = () => {
+  const defaultResult = 0;
+
+  if (!window.localStorage) {
+    return defaultResult;
+  }
+
+  const item = window.localStorage
+    .getItem('current');
+
+  return item ? toInt(item) : defaultResult;
+}
+
+const setStoredCurrentLevel = (level) => {
+  if (!window.localStorage) {
+    return;
+  }
+
+  window.localStorage.setItem('current', level)
+}
 
 export default (engine, render, levels) => {
   const padding = Vector.create(400, 400);
   const { context } = render;
+  const unlockedLevels = getStoredLevels();
 
   let currentCar;
   let currentGoal;
   let currentTexts;
 
-  let currentLevel = 0;
+  let currentLevel = getStoredCurrentLevel();
+
+  if (currentLevel >= levels.length) {
+    currentLevel = 0;
+  }
 
   let collisionGoal = [];
   let collisionWater = [];
@@ -86,7 +133,12 @@ export default (engine, render, levels) => {
 
     if (collisions.length) {
       if (currentLevel < levels.length - 1) {
-         currentLevel++;
+        currentLevel++;
+        if (!unlockedLevels.includes(currentLevel)) {
+          unlockedLevels.push(currentLevel);
+        }
+        setStoredCurrentLevel(currentLevel);
+        setStoredLevels(unlockedLevels)
       } else {
          currentLevel = 0;
       }
@@ -175,6 +227,8 @@ export default (engine, render, levels) => {
     setCurrentLevel: (levelIndex) => {
       currentLevel = levelIndex;
     },
+
+    getUnlockedLevels: () => unlockedLevels.slice(),
 
     reset
   };

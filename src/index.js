@@ -31,6 +31,16 @@ window.addEventListener('load', function load() {
 
   const showOnce = () => {
     levelsButton.removeEventListener('click', showOnce);
+
+    const unlockedLevels = getUnlockedLevels();
+
+    levelsView.innerHTML = `
+      <h2>Levels</h2>
+      <div>
+        ${levels.map((_, i) => `<a class="level${~unlockedLevels.indexOf(i) ? '' : ' locked'}">${i + 1}</a>`).join('')}
+      </div>
+    `;
+
     showView(levelsView);
   };
 
@@ -55,6 +65,7 @@ window.addEventListener('load', function load() {
   const {
     getCurrentLevel,
     setCurrentLevel,
+    getUnlockedLevels,
     reset
   } = initLevelManager(engine, render, levels);
 
@@ -102,15 +113,13 @@ window.addEventListener('load', function load() {
      }
   });
 
-  levelsView.innerHTML = `
-    <h2>Levels</h2>
-    <div>
-      ${levels.map((_, i) => `<a class="level">${i + 1}</a>`).join('')}
-    </div>
-  `;
-
   levelsView.addEventListener('click', ({ target }) => {
     const level = +target.innerText;
+
+    if (target.className.includes('locked')) {
+      return;
+    }
+
     if (isNaN(level)) {
       hideView(levelsView)();
       return;
