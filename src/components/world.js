@@ -3,9 +3,12 @@ import {
   Bodies,
   Composites,
   Composite,
+  Detector,
   Engine,
+  Events,
   Render,
-  World
+  World,
+  Vector
 } from 'matter-js';
 import createCar from './car';
 
@@ -20,10 +23,13 @@ export default () => {
       }
   });
 
-  const scale = 1;
-
   const maxSpeed = 0.2
-  const car = createCar(350, 100);
+  let car = createCar(350, 100);
+  let collisionGoal = [];
+  let collisionWater = [];
+  const water = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+  const goal = Bodies.rectangle(650, 350, 10, 60, { isStatic: true });
+
   document.addEventListener('keydown', function(e) {
     const carBody = car.bodies[1];
     if (e.keyCode == 39) { // Right arrow key
@@ -32,17 +38,49 @@ export default () => {
       Body.setAngularVelocity(carBody, velocity);
     }
   });
-  
-  World.add(engine.world, car);
 
-  const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+  const reset = () => {
+    World.clear(engine.world);
+    Engine.clear(engine);
 
-  World.add(engine.world, [ground]);
+    World.remove(engine.world, car, true);
+    car = createCar(350, 100);
+    World.add(engine.world, [car, water, goal]);
+
+    collisionGoal = car.bodies.map(body => [body, goal]);
+    collisionWater = car.bodies.map(body => [body, water]);
+  };
+  reset();
+
+  Events.on(engine, 'beforeUpdate', () => {
+    const carBody = car.bodies[1];
+    Body.setAngularVelocity(carBody, 0.1);
+  });
+
+  Events.on(engine, 'afterUpdate', () => {
+    let collisions = Detector.collisions(collisionGoal, engine)
+
+    if (collisions.length) {
+      alert('WIN.')
+      reset();
+    }
+
+    collisions = Detector.collisions(collisionWater, engine)
+    console.log(collisions);
+
+    if (collisions.length) {
+      console.log('Lose.');
+      reset();
+    }
+  });
+
   Engine.run(engine);
   Render.run(render);
 
   return {
     engine,
-    render
+    render,
+    water,
+    goal
   };
 };
