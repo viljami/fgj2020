@@ -150,13 +150,21 @@ export default (engine, render, levels) => {
     const w = window.innerWidth / 2;
     const h = window.innerHeight / 2;
 
-    context.fillStyle = '#f00';
+    context.fillStyle = '#f63';
 
-    context.moveTo(w + dx, h + dy);
+    context.save();
+    context.translate(w + dx, h + dy);
+    context.rotate(angle + Math.PI / 4);
+    context.moveTo(0, 0);
     context.beginPath();
-    context.arc(w + dx, h + dy, 10, 0, Math.PI * 2);
+    context.lineTo(-17, 0);
+    context.lineTo(0, 0);
+    context.lineTo(0, 17);
     context.closePath();
     context.fill();
+    context.rotate(Math.PI / 4);
+    context.fillRect(-5, 11, 10, 10)
+    context.restore();
 
     currentTexts.forEach(fillText);
   });
