@@ -75,4 +75,10 @@ window.addEventListener('load', function load() {
 
     engine.timing.timeScale = originalTimeScale;
   });
+  
+  interact.on('out', () => {
+     if (originalTimeScale > 0) {
+       engine.timing.timeScale = originalTimeScale;
+     }
+  });
 });
