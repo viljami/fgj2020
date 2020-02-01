@@ -80,7 +80,8 @@ class Interact extends EventEmiter {
     const { clientX, clientY } = event;
     this.coordinates.start.x = clientX;
     this.coordinates.start.y = clientY;
-    // this.emit('start', pool.create('start', clientX, clientY));
+
+    this.emit('start', pool.create('start', clientX, clientY));
   }
 
   onUp(event) {

@@ -80,6 +80,13 @@ window.addEventListener('load', function load() {
   resetButton.addEventListener('click', reset);
 
   interact.start()
+
+  let originalTimeScale = 0.0;
+  interact.on('start', ({ start, end }) => {
+    originalTimeScale = engine.timing.timeScale;
+    engine.timing.timeScale /= 2;
+  });
+
   interact.on('end', ({ start, end }) => {
     const { bounds, mouse } = render;
     const { scale, offset } = mouse;
@@ -106,5 +113,7 @@ window.addEventListener('load', function load() {
         dy < 0 ? -angle : angle
       )
     );
+
+    engine.timing.timeScale = originalTimeScale;
   });
 });
