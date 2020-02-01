@@ -1,22 +1,40 @@
-import { World, Vector } from 'matter-js';
+import { World, Vector, Engine, Render } from 'matter-js';
 
-import createWorld from './components/world.js';
-import createLevel from './components/level.js';
 import createGround from './components/ground.js';
+import initLevelManager from './components/levelmanager.js';
 import interact from './lib/interact';
 
 window.addEventListener('load', function load() {
   window.removeEventListener('load', load);
 
-  const { engine, render } = createWorld();
+  const engine = Engine.create();
+  const render = Render.create({
+      element: document.body,
+      engine,
+      options: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
+  });
 
-  const level = {
+  Engine.run(engine);
+  Render.run(render);
+  
+  const levels = [{
     objects: [
       { type: "ground", x: 350, y: 400, width: 150, height: 20 },
       { type: "ground", x: 600, y: 400, width: 150, height: 20 },
+      { type: "goal", x: 650, y: 350 }
     ]
-  };
-  createLevel(engine, level);
+  },
+  {
+    objects: [
+      { type: "ground", x: 350, y: 400, width: 150, height: 20 },
+      { type: "ground", x: 650, y: 400, width: 150, height: 20 },
+      { type: "goal", x: 650, y: 350 }
+    ]
+  }];
+  initLevelManager(engine, levels);
 
   interact.start()
   interact.on('end', ({ start, end }) => {
