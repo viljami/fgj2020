@@ -57,7 +57,7 @@ export default (engine, render, levels) => {
       if (currentLevel < levels.length - 1) {
          currentLevel++;
       } else {
-         alert('WIN.')
+         currentLevel = 0;
       }
       reset();
     }
