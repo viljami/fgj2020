@@ -29,6 +29,7 @@ export default () => {
   let collisionWater = [];
   const water = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
   const goal = Bodies.rectangle(650, 350, 10, 60, { isStatic: true });
+  const flag = Bodies.rectangle(672, 335, 30, 30, { isStatic: true });
 
   document.addEventListener('keydown', function(e) {
     const carBody = car.bodies[1];
@@ -45,7 +46,7 @@ export default () => {
 
     World.remove(engine.world, car, true);
     car = createCar(350, 100);
-    World.add(engine.world, [car, water, goal]);
+    World.add(engine.world, [car, water, goal, flag]);
 
     collisionGoal = car.bodies.map(body => [body, goal]);
     collisionWater = car.bodies.map(body => [body, water]);
