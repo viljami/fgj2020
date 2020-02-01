@@ -1,4 +1,10 @@
-import { World, Vector, Engine, Render } from 'matter-js';
+import {
+  Engine,
+  Mouse,
+  Render,
+  Vector,
+  World
+} from 'matter-js';
 
 import createGround from './components/ground.js';
 import initLevelManager from './components/levelmanager.js';
@@ -17,9 +23,11 @@ window.addEventListener('load', function load() {
       }
   });
 
+  render.mouse = Mouse.create(render.canvas);
+
   Engine.run(engine);
   Render.run(render);
-  
+
   const levels = [{
     objects: [
       { type: "ground", x: 350, y: 400, width: 150, height: 20 },
@@ -34,20 +42,34 @@ window.addEventListener('load', function load() {
       { type: "goal", x: 650, y: 350 }
     ]
   }];
-  initLevelManager(engine, levels);
+  initLevelManager(engine, render, levels);
 
   interact.start()
   interact.on('end', ({ start, end }) => {
-    const line = Vector.sub(end, start);
-    const dist = Vector.magnitude(line);
+    const { bounds, mouse } = render;
+    const { scale, offset } = mouse;
+    const scaleX = scale.x;
+    const scaleY = scale.y;
+    const sx = start.x * scaleX;
+    const sy = start.y * scaleY;
+    const ex = end.x * scaleX;
+    const ey = end.y * scaleY;
+    const dx = ex - sx;
+    const dy = ey - sy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const startX = (sx + bounds.min.x);
+    const startY = (sy + bounds.min.y);
+    const angle = Math.acos(dx / dist);
 
-    let angle = Math.acos(line.x / dist);
-
-    if (line.y < 0) {
-      angle = -angle;
-    }
-
-    const ground = createGround(start.x, start.y, dist, 10, angle);
-    World.add(engine.world, ground);
-  })
+    World.add(
+      engine.world,
+      createGround(
+        startX,
+        startY,
+        dist,
+        10,
+        dy < 0 ? -angle : angle
+      )
+    );
+  });
 });
