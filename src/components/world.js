@@ -67,7 +67,6 @@ export default () => {
     }
 
     collisions = Detector.collisions(collisionWater, engine)
-    console.log(collisions);
 
     if (collisions.length) {
       console.log('Lose.');
