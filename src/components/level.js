@@ -7,9 +7,11 @@ import {
   World
 } from 'matter-js';
 import createCar from './car';
+import createGround from './ground.js';
 
 export default (engine, level) => {
   const objects = [];
+  const groundObjects = [];
   let goal;
   let flag;
   let car;
@@ -17,8 +19,12 @@ export default (engine, level) => {
   level.objects.forEach(function(obj) {
     switch (obj.type) {
       case 'ground':
-        const ground = Bodies.rectangle(obj.x, obj.y, obj.width, obj.height, { isStatic: true });
+        const angle = obj.angle ? obj.angle : 0;
+        const dx = obj.width/2 * Math.cos(angle);
+        const dy = obj.width/2 * Math.sin(angle);
+        const ground = createGround(obj.x  - dx, obj.y - dy, obj.width, 10, angle);
         objects.push(ground);
+        groundObjects.push(ground);
         return;
       case 'goal':
         goal = Bodies.rectangle(obj.x, obj.y, 10, 60, { isStatic: true });
@@ -39,6 +45,7 @@ export default (engine, level) => {
   return {
     car,
     flag,
-    goal
+    goal,
+    groundObjects
   };
 };
