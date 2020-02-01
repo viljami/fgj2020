@@ -19,6 +19,7 @@ export default (engine, render, levels) => {
 
   let currentCar;
   let currentGoal;
+  let currentTexts;
 
   let currentLevel = 0;
 
@@ -34,8 +35,15 @@ export default (engine, render, levels) => {
 
     const { water } = createWorld(engine);
 
-    const { car, flag, goal, objects } = createLevel(engine, levels[currentLevel]);
+    const {
+      car,
+      flag,
+      goal,
+      groundObjects,
+      texts
+    } = createLevel(engine, levels[currentLevel]);
 
+    currentTexts = texts;
     currentGoal = goal;
     currentCar = car;
     collisionGoal = currentCar.bodies.map(body => [body, goal]);
@@ -46,8 +54,10 @@ export default (engine, render, levels) => {
     collisionGround = [];
 
     // Back wheel collision for slowing rotation when in air
-    for (var key in objects) {
-      collisionGround = collisionGround.concat([[car.bodies[1], objects[key]]]);
+    for (var key in groundObjects) {
+      collisionGround = collisionGround.concat([
+        [currentCar.bodies[1], groundObjects[key]]
+      ]);
     }
   };
   reset();
@@ -90,8 +100,8 @@ export default (engine, render, levels) => {
       collisionOccurrences++;
 
       if (collisionOccurrences > 1) {
-        const carBody = car.bodies[1];
-        const carBody2 = car.bodies[2];
+        const carBody = currentCar.bodies[1];
+        const carBody2 = currentCar.bodies[2];
         let velocity;
         if (carBody.angularSpeed > 0 && carBody.angularSpeed < 0.2) {
           velocity = carBody.angularSpeed - gear1Acceleration;
@@ -115,6 +125,19 @@ export default (engine, render, levels) => {
     }
   });
 
+  const fillText = ({
+    text,
+    x,
+    y,
+    font = '28px arial',
+    color = '#fff'
+  }) => {
+    const { offset } = render.mouse;
+    context.fillStyle = color;
+    context.font = font;
+    context.fillText(text, -offset.x + x, -offset.y + y);
+  };
+
   Events.on(render, 'afterRender', () => {
     const angle = Vector.angle(
       currentCar.bodies[0].position,
@@ -134,5 +157,6 @@ export default (engine, render, levels) => {
     context.closePath();
     context.fill();
 
+    currentTexts.forEach(fillText);
   });
 };

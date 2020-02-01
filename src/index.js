@@ -34,6 +34,7 @@ window.addEventListener('load', function load() {
       { type: "ground", x: 160, y: 400, width: 400, height: 20 },
       { type: "ground", x: 700, y: 400, width: 350, height: 20 },
       { type: "goal", x: 650, y: 350 },
+      { type: 'text', x: 390, y: 500, text: '- Draw here ^ -'}
     ]
   },
   {
@@ -41,7 +42,8 @@ window.addEventListener('load', function load() {
       { type: "start", x: 50, y: 50 },
       { type: "ground", x: 160, y: 100, width: 300, height: 20 },
       { type: "ground", x: 650, y: 400, width: 150, height: 20 },
-      { type: "goal", x: 650, y: 350 }
+      { type: "goal", x: 650, y: 350 },
+      { type: 'text', x: 300, y: 250, text: '- And here ^ -'}
     ]
   },
   {

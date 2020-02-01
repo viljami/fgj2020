@@ -12,6 +12,8 @@ import createGround from './ground.js';
 export default (engine, level) => {
   const objects = [];
   const groundObjects = [];
+  const texts = [];
+
   let goal;
   let flag;
   let car;
@@ -34,6 +36,9 @@ export default (engine, level) => {
         car = createCar(obj.x, obj.y);
         objects.push(car);
         return;
+      case 'text':
+        texts.push(obj);
+        return;
     }
   });
 
@@ -46,6 +51,7 @@ export default (engine, level) => {
     car,
     flag,
     goal,
-    groundObjects
+    groundObjects,
+    texts
   };
 };
