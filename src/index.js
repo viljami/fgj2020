@@ -76,7 +76,6 @@ window.addEventListener('load', function load() {
         const scaleY = scale.y;
         sc.x = startCoordinates.x + boundDeltaX;
         sc.y = startCoordinates.y + boundDeltaY;
-        console.log(startCoordinates)
         createGroundPath(sc, mouseCoordinates);
 
         startCoordinates.x = mouseCoordinates.x;

@@ -12,27 +12,27 @@ class SoundManager {
   }
 
   start() {
-    if (!this.initialized) {
-        this.initialized = true;
-    } else {
+    if (this.initialized) {
         return;
     }
 
     if (this.bgmUrl) {
       loop(this.bgm);
-      this.bgm.play();
+      play(this.bgm).then(() => {
+        this.initialized = true;
+      });
     }
   }
 
   playStart() {
     if (this.initialized) {
-      this.startAudio.play();
+      play(this.startAudio);
     }
   }
 
   playSweep() {
     if (this.initialized && !this.sweeping) {
-      this.sweep.play();
+      play(this.sweep);
       this.sweeping = true;
     }
   }
@@ -45,7 +45,7 @@ class SoundManager {
 
   playWin(){
       if (this.initialized) {
-          this.win.play();
+          play(this.win);
       }
   }
 
@@ -58,13 +58,19 @@ class SoundManager {
 
 }
 
+function play(audio) {
+  var p = audio.play();
+  p.catch(console.error);
+  return p;
+}
+
 function loop(audio) {
   if (typeof audio.loop === 'boolean') {
     audio.loop = true;
   } else {
     audio.addEventListener("ended", function() { 
       this.currentTime = 0.0;
-      this.play();
+      this.play().catch(function(){});
     }, false);
   }
 }
