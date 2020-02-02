@@ -137,11 +137,12 @@ export default (engine, render, levels) => {
         if (!unlockedLevels.includes(currentLevel)) {
           unlockedLevels.push(currentLevel);
         }
-        setStoredCurrentLevel(currentLevel);
-        setStoredLevels(unlockedLevels)
+        setStoredLevels(unlockedLevels);
       } else {
          currentLevel = 0;
       }
+
+      setStoredCurrentLevel(currentLevel);
       reset();
     }
 
