@@ -1,10 +1,29 @@
 export default [
   { // simple bridge
     objects: [
-      { type: "start", x: -100, y: 0 },
-      { type: "ground", x: 0, y: 400, width: 500, height: 20 },
+      { type: "start", x: -800, y: 0 },
+      { type: "ground", x: -400, y: 400, width: 1000, height: 20 },
+      { type: "ground", x: 550, y: 400, width: 350, height: 20 },
+      { type: "goal", x: 500, y: 350 },
+      { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
+    ]
+  },
+  { // simple bridge
+    objects: [
+      { type: "start", x: -800, y: 0 },
+      { type: "ground", x: -400, y: 400, width: 1000, height: 20 },
+      { type: "ground", x: 800, y: 400, width: 350, height: 20 },
+      { type: "goal", x: 850, y: 350 },
+      { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
+    ]
+  },
+  { // simple bridges
+    objects: [
+      { type: "start", x: -800, y: 0 },
+      { type: "ground", x: -400, y: 400, width: 1000, height: 20 },
       { type: "ground", x: 700, y: 400, width: 350, height: 20 },
-      { type: "goal", x: 650, y: 350 },
+      { type: "ground", x: 1400, y: 400, width: 350, height: 20 },
+      { type: "goal", x: 1450, y: 350 },
       { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
     ]
   },
@@ -15,6 +34,17 @@ export default [
       { type: "ground", x: 650, y: 400, width: 150, height: 20 },
       { type: "goal", x: 650, y: 350 },
       { type: 'text', x: 300, y: 250, text: '- Draw a line ^ -'}
+    ]
+  },
+  { // simple bridges
+    objects: [
+      { type: "start", x: -800, y: 0 },
+      { type: "ground", x: -400, y: 400, width: 1000, height: 20 },
+      { type: "ground", x: 700, y: 300, width: 350, height: 20 },
+      { type: "ground", x: 700, y: 400, width: 20, height: 180 },
+      { type: "ground", x: 1400, y: 400, width: 350, height: 20 },
+      { type: "goal", x: 1450, y: 350 },
+      { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
     ]
   },
   { // hill
