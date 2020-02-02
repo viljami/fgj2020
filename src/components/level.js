@@ -24,7 +24,7 @@ export default (engine, level) => {
         const angle = obj.angle ? obj.angle : 0;
         const dx = obj.width/2 * Math.cos(angle);
         const dy = obj.width/2 * Math.sin(angle);
-        const ground = createGround(obj.x  - dx, obj.y - dy, obj.width, 10, angle);
+        const ground = createGround(obj.x  - dx, obj.y - dy, obj.width, obj.height, angle);
         objects.push(ground);
         groundObjects.push(ground);
         return;
