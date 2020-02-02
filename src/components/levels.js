@@ -12,26 +12,27 @@ export default [
   { // bigger bridge
     objects: [
       { type: "start", x: -800, y: 0 },
-      { type: "ground", x: -400, y: 400, width: 1000, height: 10 },
-      { type: "ground", x: 120, y: 380, width: 270, height: 10, isStatic: false },
+      { type: "ground", x: -401, y: 400, width: 1000, height: 10 },
+      { type: "ground", x: 357.544435, y: 380, width: 539.25686117, height: 10, isStatic: false },
       { type: "ground", x: 800, y: 400, width: 350, height: 10 },
       { type: "goal", x: 850, y: 350 },
       { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
     ]
   },
-  { // simple bridges
-    objects: [
-      { type: "start", x: -800, y: 0 },
-      { type: "ground", x: -400, y: 400, width: 1000, height: 10 },
-      { type: "ground", x: 700, y: 400, width: 350, height: 10 },
-      { type: "ground", x: 1400, y: 400, width: 350, height: 10 },
-      { type: "goal", x: 1450, y: 350 },
-    ]
-  },
+  // { // simple bridges
+  //   objects: [
+  //     { type: "start", x: -800, y: 0 },
+  //     { type: "ground", x: -400, y: 400, width: 1000, height: 10 },
+  //     { type: "ground", x: 700, y: 400, width: 350, height: 10 },
+  //     { type: "ground", x: 1400, y: 400, width: 350, height: 10 },
+  //     { type: "goal", x: 1450, y: 350 },
+  //   ]
+  // },
   { // high ground
     objects: [
       { type: "start", x: 50, y: 50 },
       { type: "ground", x: 160, y: 100, width: 300, height: 10 },
+      { type: "ground", x: 400, y: 200, width: 10, height: 200, isStatic: false, angle: -Math.PI / 4 },
       { type: "ground", x: 650, y: 400, width: 150, height: 10 },
       { type: "goal", x: 650, y: 350 },
       { type: 'text', x: 300, y: 250, text: '- Draw a line ^ -'}
