@@ -1,6 +1,6 @@
 import { Bodies, Body, Vector } from 'matter-js';
 
-export default (x, y, width, height, rotation) => {
+export default (x, y, width, height, rotation, isStatic=true) => {
   const halfWidth = width / 2;
   const dx = halfWidth * Math.cos(rotation);
   const dy = halfWidth * Math.sin(rotation);
@@ -8,7 +8,7 @@ export default (x, y, width, height, rotation) => {
 
   Body.rotate(body, rotation);
   Body.translate(body, Vector.create(dx, dy));
-  Body.setStatic(body, true);
+  Body.setStatic(body, isStatic);
 
   return body;
 };
