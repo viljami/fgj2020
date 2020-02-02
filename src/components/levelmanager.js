@@ -227,6 +227,7 @@ export default (engine, render, levels) => {
 
     setCurrentLevel: (levelIndex) => {
       currentLevel = levelIndex;
+      setStoredCurrentLevel(levelIndex);
     },
 
     getUnlockedLevels: () => unlockedLevels.slice(),
