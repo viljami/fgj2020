@@ -20,7 +20,7 @@ class SoundManager {
       loop(this.bgm);
       play(this.bgm).then(() => {
         this.initialized = true;
-      });
+      }).catch(console.error);
     }
   }
 
@@ -70,7 +70,7 @@ function loop(audio) {
   } else {
     audio.addEventListener("ended", function() { 
       this.currentTime = 0.0;
-      this.play().catch(function(){});
+      this.play().catch(console.error);
     }, false);
   }
 }
