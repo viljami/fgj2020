@@ -12,6 +12,7 @@ import {
 } from 'matter-js';
 import createWorld from './world.js';
 import createLevel from './level.js';
+import EventEmitter from 'events';
 const toInt = n => +n;
 const getStoredLevels = () => {
   const defaultResult = [0];
@@ -70,6 +71,8 @@ export default (engine, render, levels) => {
     currentLevel = 0;
   }
 
+  const emitter = new EventEmitter();
+
   let collisionGoal = [];
   let collisionWater = [];
   let collisionGround = [];
@@ -79,6 +82,8 @@ export default (engine, render, levels) => {
   const reset = () => {
     World.clear(engine.world);
     Engine.clear(engine);
+
+    emitter.emit('reset');
 
     const { water } = createWorld(engine);
 
@@ -132,6 +137,7 @@ export default (engine, render, levels) => {
     let collisions = Detector.collisions(collisionGoal, engine)
 
     if (collisions.length) {
+      emitter.emit('win');
       if (currentLevel < levels.length - 1) {
         currentLevel++;
         if (!unlockedLevels.includes(currentLevel)) {
@@ -232,6 +238,8 @@ export default (engine, render, levels) => {
 
     getUnlockedLevels: () => unlockedLevels.slice(),
 
-    reset
+    reset,
+
+    emitter
   };
 };

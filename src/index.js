@@ -8,6 +8,7 @@ import {
 
 import createGround from './components/ground.js';
 import initLevelManager from './components/levelmanager.js';
+import SoundManager from './components/soundmanager.js'
 import interact from './lib/interact';
 import levels from './components/levels.js';
 
@@ -16,6 +17,7 @@ window.addEventListener('load', function load() {
 
   const drawStartEnd = false;
   const drawContinuous = true;
+  const soundsEnabled = true;
   const navigation = document.getElementById('nav');
   const main = document.getElementById('main');
   const startView = document.getElementById('start-view');
@@ -52,7 +54,8 @@ window.addEventListener('load', function load() {
     getCurrentLevel,
     setCurrentLevel,
     getUnlockedLevels,
-    reset
+    reset,
+    emitter
   } = initLevelManager(engine, render, levels);
 
   const sc = Vector.create(0, 0);
@@ -108,6 +111,14 @@ window.addEventListener('load', function load() {
 
   levelsButton.addEventListener('click', showOnceLevels);
 
+  emitter.on('win', () => {
+    SoundManager.playWin();
+  });
+
+  emitter.on('reset', () => {
+    SoundManager.playStart();
+  });
+
   let originalTimeScale = 0.0;
   let placing = false;
   interact.on('start', ({ x, y }) => {
@@ -117,6 +128,10 @@ window.addEventListener('load', function load() {
     mouseCoordinates.y = y;
     prevBounds.x = render.bounds.min.x;
     prevBounds.y = render.bounds.min.y;
+
+    if (soundsEnabled) {
+      SoundManager.start();
+    }
     originalTimeScale = engine.timing.timeScale;
     engine.timing.timeScale /= 2;
     placing = true;
@@ -126,6 +141,7 @@ window.addEventListener('load', function load() {
     if (drawStartEnd) {
       createGroundPath(start, end);
     }
+    SoundManager.stopSweep();
     engine.timing.timeScale = originalTimeScale;
     startCoordinates.x = 0;
     startCoordinates.y = 0;
@@ -160,6 +176,8 @@ window.addEventListener('load', function load() {
     const startY = (sy + bounds.min.y);
     const angle = Math.acos(dx / dist);
 
+    SoundManager.playSweep();
+
     World.add(
       engine.world,
       createGround(
@@ -176,7 +194,7 @@ window.addEventListener('load', function load() {
      if (originalTimeScale > 0) {
        engine.timing.timeScale = originalTimeScale;
      }
-
+     SoundManager.stopSweep();
      placing = false;
   });
 

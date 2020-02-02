@@ -21,6 +21,7 @@
   "homepage": "https://github.com/viljami/fgj2020#readme",
   "dependencies": {
     "matter-js": "^0.14.2",
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.12.4",
+    "sound": "^2.6.1"
   }
 }
