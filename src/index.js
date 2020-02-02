@@ -182,18 +182,15 @@ window.addEventListener('load', function load() {
 
   levelsView.addEventListener('click', ({ target }) => {
     const level = +target.innerText;
+    const isLocked = target.className.includes('locked');
 
-    if (target.className.includes('locked')) {
-      return;
-    }
-
-    if (isNaN(level)) {
+    if (!isLocked) {
       hideView(levelsView);
-      return;
-    }
 
-    setCurrentLevel(level - 1);
-    hideView(levelsView);
+      if (!isNaN(level)) {
+        setCurrentLevel(level - 1);
+      }
+    }
 
     setTimeout(() => {
       levelsButton.addEventListener('click', showOnceLevels);
