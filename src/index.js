@@ -105,7 +105,6 @@ window.addEventListener('load', function load() {
   let originalTimeScale = 0.0;
   let placing = false;
   interact.on('start', ({ start, end }) => {
-    startCoordinates = { x: mouseCoordinates.x, y: mouseCoordinates.y };
     const { bounds } = render;
     prevBounds = { x: bounds.min.x, y: bounds.min.y };
     originalTimeScale = engine.timing.timeScale;
