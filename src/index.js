@@ -23,9 +23,9 @@ window.addEventListener('load', function load() {
 
   const resetButton = document.getElementById('reset');
   const levelsButton = document.getElementById('levels');
-  let mouseCoordinates = {};
-  let startCoordinates;
-  let prevBounds = {};
+  let mouseCoordinates = Vector.create(0, 0);
+  let startCoordinates = Vector.create(0, 0);
+  let prevBounds = Vector.create(0, 0);
 
   const hideView = view => view.className = 'hide';
   const showView = view => {
@@ -55,25 +55,31 @@ window.addEventListener('load', function load() {
     reset
   } = initLevelManager(engine, render, levels);
 
+  const sc = Vector.create(0, 0);
   (function run() {
     window.requestAnimationFrame(run);
     Engine.update(engine, 1000 / 60);
 
-    if (placing && startCoordinates) {
+    if (placing && startCoordinates.x && mouseCoordinates.x) {
       const newCoordinates = render.mouse.position;
-    const { bounds, mouse } = render;
-    const boundDeltaX = bounds.min.x - prevBounds.x;
-    const boundDeltaY = bounds.min.y - prevBounds.y;
-      var diff = Math.sqrt(Math.pow(startCoordinates.x - mouseCoordinates.x + boundDeltaX, 2) + Math.pow(startCoordinates.y - mouseCoordinates.y + boundDeltaY, 2));
+      const { bounds, mouse } = render;
+      const boundDeltaX = bounds.min.x - prevBounds.x;
+      const boundDeltaY = bounds.min.y - prevBounds.y;
+      const diff = Math.sqrt(Math.pow(startCoordinates.x - mouseCoordinates.x + boundDeltaX, 2) + Math.pow(startCoordinates.y - mouseCoordinates.y + boundDeltaY, 2));
+
       if (diff > 5 && drawContinuous) {
         const { scale, offset } = mouse;
         const scaleX = scale.x;
         const scaleY = scale.y;
-        const sc = { x: startCoordinates.x + boundDeltaX, y: startCoordinates.y + boundDeltaY }
-        const nc = { x: mouseCoordinates.x, y: mouseCoordinates.y };
-        createGroundPath(sc, nc);
-        startCoordinates = { x: mouseCoordinates.x, y: mouseCoordinates.y };
-        prevBounds = { x: bounds.min.x, y: bounds.min.y };
+        sc.x = startCoordinates.x + boundDeltaX;
+        sc.y = startCoordinates.y + boundDeltaY;
+        console.log(startCoordinates)
+        createGroundPath(sc, mouseCoordinates);
+
+        startCoordinates.x = mouseCoordinates.x;
+        startCoordinates.y = mouseCoordinates.y;
+        prevBounds.x = bounds.min.x;
+        prevBounds.y = bounds.min.y;
       }
     }
   })();
@@ -104,32 +110,40 @@ window.addEventListener('load', function load() {
 
   let originalTimeScale = 0.0;
   let placing = false;
-  interact.on('start', ({ start, end }) => {
-    const { bounds } = render;
-    prevBounds = { x: bounds.min.x, y: bounds.min.y };
+  interact.on('start', ({ x, y }) => {
+    startCoordinates.x = x;
+    startCoordinates.y = y;
+    mouseCoordinates.x = x;
+    mouseCoordinates.y = y;
+    prevBounds.x = render.bounds.min.x;
+    prevBounds.y = render.bounds.min.y;
     originalTimeScale = engine.timing.timeScale;
     engine.timing.timeScale /= 2;
     placing = true;
   });
-  
+
   interact.on('end', ({ start, end }) => {
     if (drawStartEnd) {
       createGroundPath(start, end);
     }
     engine.timing.timeScale = originalTimeScale;
-    startCoordinates = null;
+    startCoordinates.x = 0;
+    startCoordinates.y = 0;
     placing = false;
   });
-  
-  interact.on('move', ({ clientX, clientY }) => {
-    if (!startCoordinates && placing) {
-      startCoordinates = { x: clientX, y: clientY };
-      const { bounds } = render;
-      prevBounds = { x: bounds.min.x, y: bounds.min.y };
+
+  interact.on('move', ({ x, y }) => {
+    if (!startCoordinates.x && placing) {
+      startCoordinates.x = x;
+      startCoordinates.y = y;
+      prevBounds.x = render.bounds.min.x;
+      prevBounds.y = render.bounds.min.y;
     }
-    mouseCoordinates = { x: clientX, y: clientY };
+
+    mouseCoordinates.x = x;
+    mouseCoordinates.y = y;
   });
-  
+
   function createGroundPath(start, end) {
     const { bounds, mouse } = render;
     const { scale, offset } = mouse;
@@ -162,6 +176,7 @@ window.addEventListener('load', function load() {
      if (originalTimeScale > 0) {
        engine.timing.timeScale = originalTimeScale;
      }
+
      placing = false;
   });
 

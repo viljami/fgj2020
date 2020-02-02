@@ -117,7 +117,7 @@ class Interact extends EventEmiter {
     }
 
     const { clientX, clientY } = event;
-    this.emit('move', { clientX, clientY });
+    this.emit('move', pool.create('move', clientX, clientY));
   }
 
   onOut(event) {
