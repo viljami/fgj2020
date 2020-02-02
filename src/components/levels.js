@@ -63,7 +63,7 @@ export default [
       { type: "goal", x: 4000, y: 2000 },
     ]
   },
-  { // loop
+  { // loop 1
     objects: [
       { type: "start", x: 350, y: 100 },
       { type: "ground", x: 450, y: 300, width: 550, height: 10, angle: Math.PI/4 },
@@ -79,7 +79,7 @@ export default [
       { type: "goal", x: 650, y: 350 }
     ]
   },
-  { // loop
+  { // loop 2
     objects: [
       { type: "start", x: 350, y: 100 },
       { type: "ground", x: 450, y: 300, width: 550, height: 10, angle: Math.PI/4 },
@@ -92,7 +92,7 @@ export default [
       { type: "ground", x: 1200, y: 100, width: 150, height: 10, angle: Math.PI*0.2 },
       { type: "ground", x: 1260, y: 150, width: 100, height: 10, angle: Math.PI*0.25 },
       { type: "ground", x: 1270, y: 155, width: 100, height: 10, angle: Math.PI*0.35 },
-      { type: "goal", x: 1050, y: 250 }
+      { type: "goal", x: 1000, y: 250 }
     ]
   },
   { // hill with a hole
