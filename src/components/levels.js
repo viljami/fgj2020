@@ -3,16 +3,17 @@ export default [
     objects: [
       { type: "start", x: -800, y: 0 },
       { type: "ground", x: -400, y: 400, width: 1000, height: 10 },
-      { type: "ground", x: 110, y: 380, width: 270, height: 10, isStatic: false },
+      { type: "ground", x: 120, y: 380, width: 270, height: 10, isStatic: false },
       { type: "ground", x: 550, y: 400, width: 350, height: 10 },
       { type: "goal", x: 500, y: 350 },
       { type: 'text', x: 50, y: 400, text: '- Draw a line ^ -'}
     ]
   },
-  { // simple bridge
+  { // bigger bridge
     objects: [
       { type: "start", x: -800, y: 0 },
       { type: "ground", x: -400, y: 400, width: 1000, height: 10 },
+      { type: "ground", x: 120, y: 380, width: 270, height: 10, isStatic: false },
       { type: "ground", x: 800, y: 400, width: 350, height: 10 },
       { type: "goal", x: 850, y: 350 },
       { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
@@ -25,7 +26,6 @@ export default [
       { type: "ground", x: 700, y: 400, width: 350, height: 10 },
       { type: "ground", x: 1400, y: 400, width: 350, height: 10 },
       { type: "goal", x: 1450, y: 350 },
-      { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
     ]
   },
   { // high ground
@@ -37,7 +37,7 @@ export default [
       { type: 'text', x: 300, y: 250, text: '- Draw a line ^ -'}
     ]
   },
-  { // simple bridges
+  { // simple unlevel bridges
     objects: [
       { type: "start", x: -800, y: 0 },
       { type: "ground", x: -400, y: 400, width: 1000, height: 10 },
@@ -45,7 +45,6 @@ export default [
       { type: "ground", x: 700, y: 400, width: 20, height: 180 },
       { type: "ground", x: 1400, y: 400, width: 350, height: 10 },
       { type: "goal", x: 1450, y: 350 },
-      { type: 'text', x: 390, y: 500, text: '- Draw a line ^ -'}
     ]
   },
   { // hill
