@@ -46,6 +46,10 @@ window.addEventListener('load', function load() {
       }
   });
 
+  window.addEventListener('resize', () => {
+    window.location.reload();
+  });
+
   render.mouse = Mouse.create(render.canvas);
 
   Render.run(render);
